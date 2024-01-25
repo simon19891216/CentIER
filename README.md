@@ -1,17 +1,33 @@
 # CentIER
-It is easy to use CentIER. For example, you can set the commond as python CentIER.py ColCEN.fasta 21 30 30. Run the commond and all analysis will be completed automatically.
+Thank you for using CentIER
 
-Explanation of the commond line:
+Before you get started with centIER, make sure you've installed LTR_retriever on your own and set up an environment variable pointing to it, giving that variable the name 'LTR_retriever'. 
 
-The first parameter refers to the pathway of the input genomic sequence file;
+Just head over to https://github.com/oushujun/LTR_retriever to download and get your hands on the program.
 
-The second parameter refers to the size of the k-mer, such as 21 in the example;
+Furthermore, your system's Python version should be Python 3.0 or higher, and you should have the pyfastx and biopython Python packages installed.
 
-The third parameter refers to the maximum distance between two intervals with abnormal k-mer signals that can be merged, such as 30 (the first) in the example.
+After downloaded the CentIERv2.0:
 
-The fourth parameter refers to the tolerance value for the left and right boundaries of the merged interval, such as 30 (the second) in the example.
+tar -zxvf CentIERv2.0.tar.gz
 
-The third and fourth parameters will be changed, according to the size of the input genome.
+cd CentIERv2.0
 
-Generally, the parameters in the example are appropriate (these parameters have been tested on the genomes of Arabidopsis thaliana, rice and maize.) 
+cp the_pathway_of_genome ./
+
+if you want to add the gff file (genome annotation file，the addition of GFF files can improve prediction accuracy.)：
+
+cp the_pathway_of_gff ./
+
+Then, you can run centIER using the following command(the example data is the T2T genome of Arabidopsis thaliana. We strongly recommend that users run the program with example data to check if it is working properly before using their own data.):
+
+python CentIERv2.0.py -g the_pathway_of_genome -gff the_pathway_of_annotation_file (-gff is optional)
+
+all results can be found in the folder of CentIER_final_results
+
+Moreover, several intermediate files will be generated, and you can choose to delete these temporary files by adding the -c option.
+
+If you encounter any issues while running the program, you can contact me directly via email (xudongzhuanyong@163.com).
+
+#cite:Xu D, Wen H, Feng W, Zhang X, Hui X, Xu Y, Chen F, Pan W: CentIER: accurate centromere identification for plant genomes with sequence specificity information. bioRxiv 2023:2023.2012.2024.573279.
 
