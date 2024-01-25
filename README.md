@@ -6,6 +6,9 @@ Before you get started with centIER, make sure you've installed LTR_retriever on
 Just head over to https://github.com/oushujun/LTR_retriever to download and get your hands on the program.
 
 Furthermore, your system's Python version should be Python 3.0 or higher, and you should have the pyfastx and biopython Python packages installed.
+# download and install
+
+you can get CentIER, at the ["Releases" ](https://github.com/simon19891216/CentIER/releases/tag/CentIERv2.0) module.
 
 After downloaded the CentIERv2.0:
 
