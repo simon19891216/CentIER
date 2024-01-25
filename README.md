@@ -26,7 +26,7 @@ Then, you can run centIER using the following command(the example data is the T2
 
 python CentIERv2.0.py -g the_pathway_of_genome -gff the_pathway_of_annotation_file (-gff is optional)
 
-all results can be found in the folder of CentIER_final_results
+All results can be found in the folder of CentIER_final_results
 
 Moreover, several intermediate files will be generated, and you can choose to delete these temporary files by adding the -c option.
 
