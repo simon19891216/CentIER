@@ -29,5 +29,5 @@ Moreover, several intermediate files will be generated, and you can choose to de
 
 If you encounter any issues while running the program, you can contact me directly via email (xudongzhuanyong@163.com).
 
-#cite:Xu D, Wen H, Feng W, Zhang X, Hui X, Xu Y, Chen F, Pan W: CentIER: accurate centromere identification for plant genomes with sequence specificity information. bioRxiv 2023:2023.2012.2024.573279.
+# cite:Xu D, Wen H, Feng W, Zhang X, Hui X, Xu Y, Chen F, Pan W: CentIER: accurate centromere identification for plant genomes with sequence specificity information. bioRxiv 2023:2023.2012.2024.573279.
 
