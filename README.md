@@ -8,7 +8,7 @@ Just head over to https://github.com/oushujun/LTR_retriever to download and get 
 Furthermore, your system's Python version should be Python 3.0 or higher, and you should have the pyfastx and biopython Python packages installed.
 # download and install
 
-you can get CentIER, at the ["Releases" ](https://github.com/simon19891216/CentIER/releases/tag/CentIERv2.0) module.
+You can get CentIER, at the ["Releases" ](https://github.com/simon19891216/CentIER/releases/tag/CentIERv2.0) module, and the ColCEN.fasta file is an example data (T2T genome of Arabidopsis).
 
 After downloaded the CentIERv2.0:
 
@@ -18,7 +18,7 @@ cd CentIERv2.0
 
 cp the_pathway_of_genome ./
 
-if you want to add the gff file (genome annotation file，the addition of GFF files can improve prediction accuracy.)：
+If you want to add the gff file (genome annotation file，the addition of GFF files can improve prediction accuracy.)：
 
 cp the_pathway_of_gff ./
 
