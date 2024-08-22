@@ -112,7 +112,7 @@ def kmer_cal(file):
                 kmer_count[name].add(std);kmer_count[name].add(end)
     return arange
     
-def merge_regions(region):#单独处理每个得到的区间，便于有交集的区间合并
+def merge_regions(region):
     final_result={};target_list=[]
     for i,all in region.items():
         length=len(all);all=sorted(all,key=lambda x:x[0])
@@ -248,7 +248,7 @@ def findPosition(gap, selfweights, bed1, bed2):
     return centremere
 
 def strict_range(bat):
-    with open(bat) as f:#对于单体长度，后续需要设置选项供用户选择
+    with open(bat) as f:
         monomer={}
         for line in f:
             if 'Sequence: ' in line:
@@ -258,11 +258,11 @@ def strict_range(bat):
                 linelist=line.split(' ')
                 if 20<=int(linelist[2])<=1000 and float(linelist[3])>=10:
                     monomer[chrid][(int(linelist[0]),int(linelist[1]),linelist[13])]=float(linelist[3])
-    monomer={i:sorted(j.items(),key = lambda x:x[1],reverse = True)[:10] for i,j in monomer.items()}#((14841146, 17128917, 'AGGCGTAAGAATTGTATCCTTGTTAAAAGACACAAAGCCAAAGACTCATATGGACTTTGGCTACACCATGAAAGCTTTGAGAAGCAAGAAGAAGGTTGGTTAGTGTTTTGGAGTCGAATATGACTTGATCTCATGTGTATGATTGAGTATAAGAACTTAAACCGCAACCGGATCTTAA'), 12867.4)
+    monomer={i:sorted(j.items(),key = lambda x:x[1],reverse = True)[:10] for i,j in monomer.items()}
     return monomer
 
 def strict_range_repeat(dirfinal,bat):
-    with open(bat) as f:#对于单体长度，后续需要设置选项供用户选择
+    with open(bat) as f:
         monomer={}
         for line in f:
             if 'Sequence: ' in line:
@@ -322,9 +322,10 @@ def identify_period_second(content,period):
             period_copies[period_size]+=copies
     all_copy=list(period_copies.values())
     all_copy.sort(reverse=True)
-    target_cop=all_copy[0]
-    target_period=[i for i,j in period_copies.items() if j == target_cop]
-    return target_period[0]
+    if len(all_copy)>0:
+        target_cop=all_copy[0]
+        target_period=[i for i,j in period_copies.items() if j == target_cop]
+        return target_period[0]
 
 def search_range(content,f_period):
     copies_monomer={};monomer_range={};monomer_consensus={};size_range=[];cop_range={};total_range=[]
@@ -422,7 +423,7 @@ def exseq_translate(prefix,fa_file,script_path):
     hmmsearch= script_path + '/bin/hmmsearch' 
     args=[' ','--noali','--tblout',prefix+'LTR-hmmresult.txt','-E','1e-5',script_path+'/bin/REXdb.hmm',filepath]
     args=hmmsearch+" ".join(args)
-    result=subprocess.Popen(args,shell=True) #这里，kegg的结果文件"./pfam-hmmresult.txt"应该存放在本目录下，用完后删除即可
+    result=subprocess.Popen(args,shell=True)
     result.wait()
     with open(prefix+'LTR-hmmresult.txt') as f, open(prefix+"_LTR_positionb.txt","w") as f1:
         content={line.split()[0].split("|")[0].replace("*","\t")+"\t"+line.split()[2]+"\n" for line in f if "#" not in line}
@@ -430,8 +431,8 @@ def exseq_translate(prefix,fa_file,script_path):
 
 def draw_result(prefix):
     with open(prefix+"_centromere_range.txt") as f:
-        cen_length={line.split()[0]:int(line.split()[2])-int(line.split()[1]) for line in f}#着丝粒长度
-    with open(prefix+"_monomer_in_centromere.txt") as f:#monomer在着丝粒上的位置
+        cen_length={line.split()[0]:int(line.split()[2])-int(line.split()[1]) for line in f}
+    with open(prefix+"_monomer_in_centromere.txt") as f:
         repeat_position={line.split()[0]:line.split()[1]+"\t"+line.split()[2] for line in f}
     with open(prefix+"_LTR_positionb.txt") as f:
         ltr_monomer={};monomer_type=set();compare=set()
@@ -472,7 +473,7 @@ def draw_result(prefix):
         chr_tests.append(chr_text.format(2.5,yp,"CEN-"+ID))
         if ID in repeat_position:
             rp1=5+int(repeat_position[ID].split("\t")[0])*unit;rp2=abs((int(repeat_position[ID].split("\t")[1])-int(repeat_position[ID].split("\t")[0]))*unit)
-            repc.append(chr_line.format(rp1,yp-3,rp2))#需要加标题
+            repc.append(chr_line.format(rp1,yp-3,rp2))
         if ID in rt_position:
             rt_lists=rt_position[ID]
             for line in rt_lists:
@@ -494,12 +495,12 @@ def draw_result(prefix):
         for k in range(int((length)/0.2)):
             x3=x1+k*0.2
             if k%10==0:
-                lm=kmer_mark.format(x3,y1-1,0.5)#大刻度
+                lm=kmer_mark.format(x3,y1-1,0.5)
                 mark_line.append(lm)
-                markt=chr_text.format(x3,y1-1.1,str(int(k/5)))#只有在大刻度上才有数字数字
+                markt=chr_text.format(x3,y1-1.1,str(int(k/5)))
                 mark_text.append(markt)
             else:
-                lm=kmer_mark.format(x3,y1-0.75,0.25)#小刻度
+                lm=kmer_mark.format(x3,y1-0.75,0.25)
                 mark_line.append(lm)
         unit_test.append(chr_text.format(x3+1.5,y1-1.1,unit_text))
     with open(prefix+"_draw_cen.svg","w") as f:
@@ -593,7 +594,7 @@ if __name__ == '__main__':
         mul_cents=True
     else:
         mul_cents=False
-    kmer_count={};listl=[];ranges={};dirfinal={} #chr_length_list记录的是染色体ID和长度
+    kmer_count={};listl=[];ranges={};dirfinal={}
     chrid_list=[];chr_length={};arange={};fasta_sequence={};repeat_file=False
     fasta_sequence={name:seq for name,seq in pyfastx.Fasta(fasta,build_index=False)}
     #The Linux system should be a 64-bit system.
@@ -667,7 +668,7 @@ if __name__ == '__main__':
                         names=['chr', 'start', 'end', 'id'])
         gap = findGap(creat_matrix(args.matrix1))
         finer_diag = read_finer_matrix(args.matrix2, bed2)
-        hic_dir = findPosition(gap, finer_diag, bed1, bed2) #hic_dir是收集hic信号的
+        hic_dir = findPosition(gap, finer_diag, bed1, bed2)
         hic_dir=merge_regions(hic_dir)
     else:hic_dir={}
     
@@ -680,7 +681,6 @@ if __name__ == '__main__':
         exe='LTR_retriever'
         a=shutil.which('LTR_retriever')
         if a!=None:
-            # arg=exe+' -genome '+fasta+' -inharvest '+database+'.harvest.scn '+'-infinder '+database+'.finder.scn '+'-threads 60 -u 4.02e-9'
             arg=[exe,'-genome',fasta, '-inharvest',database+'.harvest.scn','-infinder',database+'.finder.scn','-threads','60','-u','4.02e-9']
             step4=subprocess.Popen(arg)
             step4.wait()
@@ -706,7 +706,7 @@ if __name__ == '__main__':
                 chrid=linelist[0];level=float(linelist[t])
                 if chrid not in LTR_level:LTR_level[chrid]=[]
                 LTR_level[chrid].append(level)
-            level_dir={i:set(sorted(j,reverse=True)[:10]) for i,j in LTR_level.items()}#原定[:3]
+            level_dir={i:set(sorted(j,reverse=True)[:10]) for i,j in LTR_level.items()}
             for line in content:
                 linelist=line.split()
                 chrid=linelist[0];st=int(linelist[1]);ed=int(linelist[2]);level=float(linelist[t])
@@ -722,7 +722,7 @@ if __name__ == '__main__':
 
     bat=prefix+".2.5.7.80.10.50.2000.dat"
     if repeat_file==False or mul_cents==True:
-        t_cont=[];k_cont=[];tf_cont=[];hic_cont=[];final_result={};target_list=[];number=0 #number用于存储交集的次数
+        t_cont=[];k_cont=[];tf_cont=[];hic_cont=[];final_result={};target_list=[];number=0
         region_percent={};tandem_repeat={};number_list={};precise_range={}
         monomer_select=strict_range(bat)
         tandem_dir={}
@@ -757,7 +757,6 @@ if __name__ == '__main__':
                         if (n<m1 or m>n1)==False and index<length-2:target_list=[min(m,n,m1,n1),max(m,n,m1,n1)];number+=1
                         elif index==length-2 or (n<m1 or m>n1)==True:
                             if (n<m1 or m>n1)==False:target_list=[min(m,n,m1,n1),max(m,n,m1,n1)];number+=1
-                            # final_result[i].append(target_list)
                             region_percent[i].append(list(target_list)+[number])
                             number_list[i].append(number)
                             target_list=[];number=0
@@ -771,8 +770,7 @@ if __name__ == '__main__':
                                 region_percent[i].append(list(target_list)+[number])
                                 number_list[i].append(number)
                         else:
-                            # final_result[i].append(all[-1])
-                            region_percent[i].append(list(all[-1])+[number])#第三项是可信度
+                            region_percent[i].append(list(all[-1])+[number])
                             number_list[i].append(number)
                         target_list=[]
         for i,content in region_percent.items():
@@ -783,7 +781,7 @@ if __name__ == '__main__':
                 a,b,c=j
                 if mul_cents==False and c==max_number:
                     final_result[i].append(j)
-                elif mul_cents==True and c>=1: #预测多着丝粒情况
+                elif mul_cents==True and c>=1:
                     final_result[i].append(j)
         if mul_cents==False:
             s=0;e=0;all_list=[]
@@ -853,7 +851,6 @@ if __name__ == '__main__':
                         all_list.append((i,s,e))
                         lists=[]
                         list_max=[]
-            print('all_list',all_list)
             save=open(output + prefix+"_monomer_seq.txt","w")
             for j in all_list:
                 i,s,e=j;detail=[]
@@ -904,8 +901,6 @@ if __name__ == '__main__':
             for ID,lists in allfor.items():
                 p=identify_period_second(lists,f_period)
                 ID_period[ID]=p
-        print('precise_range1',precise_range)
-
         save=open(output + prefix+"_monomer_seq.txt","w")
         for ID,infors in allfor.items():
             strict_r=st_range[ID]
@@ -916,7 +911,6 @@ if __name__ == '__main__':
                 seq=strict_r[2]
             save.write(ID+"\t"+seq+"\n")
         save.close()
-        print('precise_range2',precise_range)
         repeat_candidate_range={}
         for i,j in arange.items():
             chrlength=chr_length[i]
@@ -926,7 +920,6 @@ if __name__ == '__main__':
             if i in st_range:strict_r=st_range[i]
             if strict_r!='':
                 repeat_candidate_range[i]=(int(strict_r[0]),int(strict_r[1]))
-                # rangefile.write(i+"\t"+str(strict_r[0])+"\t"+str(strict_r[1])+"\n")
             else:
                 if e-s>2000000:
                     repeat_candidate_range[i]=(s,e)
@@ -969,7 +962,6 @@ if __name__ == '__main__':
                             if e>chrlength:e=chrlength
                             if s<=0:s=1
                         repeat_candidate_range[i]=(s,e)
-                    # rangefile.write(i+"\t"+str(s)+"\t"+str(e)+"\n")
         LTR_regiont={};LTR_number={};number=0
         for i,content in LTR_region.items():
             length=len(content);LTR_number[i]={}
@@ -999,22 +991,17 @@ if __name__ == '__main__':
                 if s1<=cs<ce<=e1 or cs<=s1<e1<=ce:
                     lists=sorted([s1,e1,cs,ce])
                     all_list.append((ID,lists[1],lists[2]));a=1;break
-                    # rangefile.write(ID+"\t"+str(lists[1])+"\t"+str(lists[2])+"\n");a=1;break
                 else:
                     if cs<s1<ce:
                         all_list.append((ID,cs,ce));a=1;break
                     elif cs==ce==0:
                         all_list.append((ID,s1,e1));a=1;break
-                        # rangefile.write(ID+"\t"+str(s1)+"\t"+str(e1)+"\n");a=1;break
                     elif s1>ce and s1-ce<=100000:
                         all_list.append((ID,cs,e1));a=1;break
-                        # rangefile.write(ID+"\t"+str(cs)+"\t"+str(e1)+"\n");a=1;break
                     elif cs<e1<ce:
                         all_list.append((ID,s1,e1));a=1;break
-                        # rangefile.write(ID+"\t"+str(s1)+"\t"+str(e1)+"\n");a=1;break
                     elif cs>e1 and cs-e1<=100000:
                         all_list.append((ID,s1,ce));a=1;break
-                        # rangefile.write(ID+"\t"+str(s1)+"\t"+str(ce)+"\n");a=1;break
             if a==0:
                 rep_gene_number=0;ltr_gene_number=0
                 target=[]
@@ -1028,24 +1015,19 @@ if __name__ == '__main__':
                         if grn1<=n1<=grn2:rep_gene_number+=1
                     if rep_gene_number<=ltr_gene_number:
                         all_list.append((ID,cs,ce))
-                        # rangefile.write(ID+"\t"+str(cs)+"\t"+str(ce)+"\n")
                     else:
                         if max_value-min_value>3000000:
                             if ce<=min_value or cs>=max_value:
                                 all_list.append((ID,min_value,max_value))
-                                # rangefile.write(ID+"\t"+str(min_value)+"\t"+str(max_value)+"\n")
                             else:
                                 all_list.append((ID,cs,ce))
-                                # rangefile.write(ID+"\t"+str(cs)+"\t"+str(ce)+"\n")
                         else:
                             all_list.append((ID,min_value,max_value))
-                            # rangefile.write(ID+"\t"+str(min_value)+"\t"+str(max_value)+"\n")
                 else:
                     seqs=fasta_sequence[ID]
                     if cs<1000000 or chr_length[ID]-ce<1000000:
                         if len(content)==1:
                             all_list.append((ID,min_value,max_value))
-                            # rangefile.write(ID+"\t"+str(min_value)+"\t"+str(max_value)+"\n")
                         else:
                             dirs={}
                             for tl in content:
@@ -1056,27 +1038,12 @@ if __name__ == '__main__':
                             for i,content in dirs.items():
                                 if i==min(dirs):
                                     all_list.append((ID,content[0],content[1]))
-                                    # rangefile.write(ID+"\t"+str(content[0])+"\t"+str(content[1])+"\n")
                     else:
                         cs,ce=target_ltr
                         if cs<2000000:
                             all_list.append((ID,csl,cel))
-                            # rangefile.write(ID+"\t"+str(csl)+"\t"+str(cel)+"\n")
                         else:
                             all_list.append((ID,cs,ce))
-    #     monomer_position=open(fasta+"_monomer_in_centromere.txt","w")
-    #     with open(fasta+"_centromere_range.txt") as f:
-    #         for line in f:
-    #             linelist=line.split()
-    #             ID=linelist[0];s=int(linelist[1]);e=int(linelist[2])
-    #             if ID in precise_range:s1,e1=precise_range[ID]
-    #             else:s1,e1,seq1=st_range[ID]
-    #             s2=s1-s;e2=e1-s
-    #             if s2<0:s2=1
-    #             if e2-s2>e-s:e2=e
-    #             monomer_position.write(ID+"\t"+str(s2)+"\t"+str(e2)+"\n")
-    #     monomer_position.close()
-    # print('all_list2',all_list)
     print("****************************** Start defining the centromere range... *************************")
     rangefile=open(output + prefix+"_centromere_range.txt","w")
     [rangefile.write(i[0]+'\t'+str(i[1])+'\t'+str(i[2])+'\n') for i in all_list]
@@ -1097,11 +1064,6 @@ if __name__ == '__main__':
             all_cen_seq.write(">"+ID+"_centromere_seq\n")
             all_cen_seq.write(fa.fetch(ID, seq_range)+"\n")
     all_cen_seq.close()
-    # subprocess.Popen('cp '+fasta+"_all_centromere_seq.txt ./CentIER_final_results",shell=True)
-    # if os.path.exists("./inter_doc")==False:
-    #     creat_folder=subprocess.Popen("mkdir ./inter_doc",shell=True)
-    #     creat_folder.wait()
-
     print("****************************** Annotating the centromere *************************")
     monomer_position=open(output + prefix +"_monomer_in_centromere.txt","w")
     with open(output + prefix+ "_centromere_range.txt") as f:
@@ -1115,8 +1077,6 @@ if __name__ == '__main__':
             if e2-s2>e-s:e2=e
             monomer_position.write(ID+"\t"+str(s2)+"\t"+str(e2)+"\n")
     monomer_position.close()
-
-    # subprocess.Popen('cp '+fasta+"_monomer_in_centromere.txt ./CentIER_final_results",shell=True)
     ltr_result=open(output + prefix+"_ltr_position.txt", "w")
     ltr1=search_ltr1(output + prefix+"_all_centromere_seq.txt")
     [ltr_result.write(i+"\t"+j+"\n") for i,j in ltr1.items() if j!=""]
@@ -1124,7 +1084,7 @@ if __name__ == '__main__':
     ltr2=search_ltr2(output + prefix+"_all_centromere_seq.txt")
     for index, ID in enumerate(ltr1):
         if index in ltr2:
-            for i in ltr2[index]:#如果中间有个染色体没有ltr这里可能需要处理
+            for i in ltr2[index]:
                 s,e=i
                 ltr_result.write(ID+"\t"+str(s)+"\t"+str(e)+"\n")
     ltr_result.close()
@@ -1134,13 +1094,3 @@ if __name__ == '__main__':
     draw_result(output + prefix)
     statistics_ltr(output + prefix)
     print("*****************CentIER running finished!**************************")
-    # subprocess.Popen('rm -rf ./gtltr')
-    # subprocess.Popen('rm '+fasta+"_monomer_seq.txt")
-    # subprocess.Popen('rm '+fasta+"_centromere_range.txt")
-    # subprocess.Popen('rm '+fasta+"_all_centromere_seq.txt")
-    # subprocess.Popen('rm '+fasta+"_monomer_in_centromere.txt")
-    # if args.clear:
-    #     subprocess.Popen('rm '+fasta+'_*')
-    #     subprocess.Popen('rm '+fasta+'.*')
-
-
