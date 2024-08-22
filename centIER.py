@@ -735,7 +735,7 @@ if __name__ == '__main__':
             # print(i)
             if i in tandem_dir:
                 t_cont=tandem_dir[i];t_cont2=tandem_dir2[i]
-                if len(t_cont2)/len(t_cont)<0.5:index=2
+                if if len(t_cont)!=0 and len(t_cont2)/len(t_cont)<0.5:index=2
                 else:index=1
                 all+=index*t_cont
             if i in kmer_dir:k_cont=kmer_dir[i];all+=k_cont #;print('k_cont',k_cont)
