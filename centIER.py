@@ -568,7 +568,7 @@ def statistics_ltr(prefix):
             f1.write("\t".join(infor)+"\n")
 
 if __name__ == '__main__':
-    trf, gt, ltr = 0,0,0
+    trf, gt, ltr = 1, 1, 1
     RED = '\033[91m'
     RESET = '\033[0m' ### give a error color
     args = argparseFunc()
@@ -623,11 +623,11 @@ if __name__ == '__main__':
             arg=[exe,'-D','15000','-d','1000','-L','7000','-l','100','-p','20','-C','-M','0.9',fasta,'>', database+'.finder.scn']
             step3=subprocess.Popen(' '.join(arg),shell=True)
         else:
-            sys.stderr.write(f"{RED}The gt software has not been detected in the \
-                            environment variables of the server. Please download \
-                            and install it, and then add it to the environment \
-                            variables. The download link is \
-                            https://github.com/genometools/genometools..{RESET}\n")
+            sys.stderr.write(f"{RED}The gt software has not been detected in the "
+                 "environment variables of the server. Please download "
+                 "and install it, and then add it to the environment "
+                 "variables. The download link is "
+                 "https://github.com/genometools/genometools.{RESET}\n")
             sys.exit(1)
     
     arange=kmer_cal(fasta)
@@ -685,11 +685,11 @@ if __name__ == '__main__':
             step4=subprocess.Popen(arg)
             step4.wait()
         else:
-            sys.stderr.write(f"{RED}The LTR_retriever software has not been detected \
-                            in the environment variables of the server. Please \
-                            download and install it, and then add it to the environment \
-                            variables. The download link is \
-                            https://github.com/oushujun/LTR_retriever.{RESET}\n")
+            sys.stderr.write(f"{RED}The LTR_retriever software has not been detected "
+                 "in the environment variables of the server. Please "
+                 "download and install it, and then add it to the environment "
+                 "variables. The download link is "
+                 "https://github.com/oushujun/LTR_retriever.{RESET}\n")
             sys.exit(1)
     if trf:
         TRF_search.wait()
@@ -715,9 +715,9 @@ if __name__ == '__main__':
                     LTR_region[chrid].append([st,ed])
         tf_dir=merge_regions(LTR_region)
     else:
-        sys.stderr.write(f"{RED}Error: 'It appears that some errors occurred \
-                         during the analysis of LTRs.You can contact the author \
-                         to assist in resolving the issue.'{RESET}\n")
+        sys.stderr.write(f"{RED}Error: 'It appears that some errors occurred "
+                 "during the analysis of LTRs. You can contact the author "
+                 "to assist in resolving the issue.'{RESET}\n")
         sys.exit(1)
 
     bat=prefix+".2.5.7.80.10.50.2000.dat"
