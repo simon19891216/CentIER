@@ -329,6 +329,9 @@ def identify_period_second(content,period):
 
 def search_range(content,f_period):
     copies_monomer={};monomer_range={};monomer_consensus={};size_range=[];cop_range={};total_range=[]
+    tmp_list = [int(line.split()[4]) for line in content if len(line.split()[13])==f_period]
+    if len(tmp_list) == 0:
+        return 0
     consensus_max=max([int(line.split()[4]) for line in content if len(line.split()[13])==f_period])
     for line in content:
         linelist=line.split()
@@ -905,8 +908,10 @@ if __name__ == '__main__':
         for ID,infors in allfor.items():
             strict_r=st_range[ID]
             if strict_r=='':
-                seq,st,ed=search_range(infors,ID_period[ID])
-                precise_range[ID]=(st,ed)
+                tmp = search_range(infors,ID_period[ID])
+                if tmp:
+                    seq,st,ed=tmp
+                    precise_range[ID]=(st,ed)
             else:
                 seq=strict_r[2]
             save.write(ID+"\t"+seq+"\n")
