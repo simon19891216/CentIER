@@ -831,29 +831,30 @@ if __name__ == '__main__':
                         big_interval=[a,b]
                         enrichment_regions = find_enrichment_with_bin_size(big_interval, all, bin_size)
                         confidence=sorted({j for i,j in enrichment_regions.items()},reverse=True)
-                        thre=confidence[1];max_thre=confidence[0]
-                        if thre<2:thre==2
-                        for bin_index, count in enrichment_regions.items():
-                            if count>=thre:
-                                start_of_bin = bin_index * bin_size + big_interval[0]
-                                end_of_bin = (bin_index + 1) * bin_size + big_interval[0] - 1
-                                if count==max_thre:list_max.append(start_of_bin);list_max.append(end_of_bin)
-                                lists.append(start_of_bin);lists.append(end_of_bin)
-                        list_max=sorted(list_max)
-                        max_v1=list_max[0];max_v2=list_max[-1]
-                        s=min(lists);e=max(lists)
-                        if s==0:
-                            if max_v1<e:s=max_v1
-                            else:s=1
-                        if e-s>5000000:
-                            unit=int(((int((e-s)/1000000))*1000000)/6)
-                            e-=unit;s+=unit
-                        if e-s<1000000:s-=500000;e+=500000
-                        if s<0:s=1
-                        if e>chrlength:e=chrlength
-                        all_list.append((i,s,e))
-                        lists=[]
-                        list_max=[]
+                        if len(confidence)>=2:
+                            thre=confidence[1];max_thre=confidence[0]
+                            if thre<2:thre==2
+                            for bin_index, count in enrichment_regions.items():
+                                if count>=thre:
+                                    start_of_bin = bin_index * bin_size + big_interval[0]
+                                    end_of_bin = (bin_index + 1) * bin_size + big_interval[0] - 1
+                                    if count==max_thre:list_max.append(start_of_bin);list_max.append(end_of_bin)
+                                    lists.append(start_of_bin);lists.append(end_of_bin)
+                            list_max=sorted(list_max)
+                            max_v1=list_max[0];max_v2=list_max[-1]
+                            s=min(lists);e=max(lists)
+                            if s==0:
+                                if max_v1<e:s=max_v1
+                                else:s=1
+                            if e-s>5000000:
+                                unit=int(((int((e-s)/1000000))*1000000)/6)
+                                e-=unit;s+=unit
+                            if e-s<1000000:s-=500000;e+=500000
+                            if s<0:s=1
+                            if e>chrlength:e=chrlength
+                            all_list.append((i,s,e))
+                            lists=[]
+                            list_max=[]
             save=open(output + prefix+"_monomer_seq.txt","w")
             for j in all_list:
                 i,s,e=j;detail=[]
