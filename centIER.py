@@ -728,6 +728,7 @@ if __name__ == '__main__':
         t_cont=[];k_cont=[];tf_cont=[];hic_cont=[];final_result={};target_list=[];number=0
         region_percent={};tandem_repeat={};number_list={};precise_range={}
         monomer_select=strict_range(bat)
+        st_range=strict_range_repeat(dirfinal,bat)
         tandem_dir={}
         for i,j in monomer_select.items():
             tandem_dir[i]=[[m[0][0],m[0][1]] for m in j]
