@@ -890,7 +890,7 @@ if __name__ == '__main__':
     elif repeat_file==True and mul_cents==False:
         precise_range={};all_list=[]
         st_range=strict_range_repeat(dirfinal,bat)
-        with open(fasta+".2.5.7.80.10.50.2000.dat") as f:
+        with open(bat) as f:
             allfor={};final_period=[];ID_period={};all_range=[]
             for line in f:
                 if "Sequence: " in line:
